@@ -1,12 +1,12 @@
 import spacy
 from collections import deque
 
-from pronouns_gender_number import \
+from libs.pronouns_gender_number import \
   PLURAL_PRONOUNS, SINGULAR_PRONOUNS,\
   MASCULINE_PRONOUNS, FEMININE_PRONOUNS
 
-from masculine import masculine  # list of masculine nouns/names lower-case
-from feminine import feminine  # list of feminine nouns/names lower-case
+from libs.masculine import masculine  # list of masculine nouns/names lower-case
+from libs.feminine import feminine  # list of feminine nouns/names lower-case
 
 
 nlp = spacy.load('en_core_web_sm')  # md / sm
@@ -14,6 +14,8 @@ nlp = spacy.load('en_core_web_sm')  # md / sm
 
 # nouns that will be treated as pronouns
 NOUNS_AS_PRONOUNS = ['who', 'that']
+
+ENCODING = 'utf-8'
 
 
 def update_last(deque_obj, new_value):
@@ -54,7 +56,8 @@ def match_last_pronoun(nouns, pronoun):
     for noun_token in reversed(nouns):
         if noun_token:
             #print("Checking if %s is match" % noun_token.text)
-            noun_is_plur = (noun_token.text.lower()[-1] == 's') and (noun_token.lemma_[-1] != 's')
+            noun_is_plur = (noun_token.text.lower()[-1] == 's') and \
+                (noun_token.lemma_[-1] != 's')
             noun_is_masc = is_masculine(noun_token)
             noun_is_fem = is_feminine(noun_token)
             # match number
@@ -64,7 +67,6 @@ def match_last_pronoun(nouns, pronoun):
                 if (noun_is_masc and not pron_is_fem) or \
                    (noun_is_fem and not pron_is_masc) or \
                    (not noun_is_fem and not noun_is_masc):
-                    #print("------------------->match pronoun to %s" % noun_token.text)
                     return noun_token
     return None
 
@@ -103,34 +105,33 @@ class PronounReplacement:
             update_last(self.last_nouns, token)
             return (' ' + token.text)
 
-    
+
     def replace_pronouns(self):
         self.updated_text = ""
         temp = self.initial_text.replace('\n', '.\n')
         sentences = temp.split('.')
-        for sent in sentences:
-            tokens = nlp(unicode(sent))
-            new_sent = ''
+        for sentence in sentences:
+            tokens = nlp(sentence)
+            new_sentence = ''
             for token in tokens:
                 if token.pos_ in [u'NOUN', u'PROPN'] and u'obj' not in token.dep_:
-                    new_sent += ' ' + self.process_noun(token)
+                    new_sentence += ' ' + self.process_noun(token)
                 elif token.pos_ == u'ADJ' and token.dep_ == u'advcl':
-                    new_sent += ' ' + self.process_noun(token)
+                    new_sentence += ' ' + self.process_noun(token)
                 elif token.pos_ == u'PRON':
                     replacement = self.get_matching_noun(token)
-                    #new_sent += ' >>' + token.text.upper() + ' ' + replacement + '<< '
-                    new_sent += ' ' + replacement
+                    new_sentence += ' ' + replacement
                 elif (token.pos_ == u'ADJ' and token.dep_ == u'poss') or \
                      (token.pos_ == u'PRP$'):
                     replacement = self.get_matching_noun(token)
-                    #new_sent += ' >>' + token.text.upper() + ' ' + replacement + "'s<< "
-                    new_sent += ' ' + replacement
+                    new_sentence += ' ' + replacement
                 else:
-                    new_sent += ' ' + repr(token)
-            self.updated_text += '.  ' + new_sent
+                    new_sentence += ' ' + repr(token)
+            self.updated_text += '.  ' + new_sentence
 
 
 def replace_pronouns(in_str):
     replace_obj = PronounReplacement(in_str)
     replace_obj.replace_pronouns()
     return replace_obj.updated_text
+
