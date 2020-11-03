@@ -1,3 +1,5 @@
+
+import os
 import spacy
 from collections import deque
 
@@ -8,6 +10,10 @@ from libs.pronouns_gender_number import \
 from libs.masculine import masculine  # list of masculine nouns/names lower-case
 from libs.feminine import feminine  # list of feminine nouns/names lower-case
 
+
+# Setup Spacy
+if not spacy.util.is_package('en_core_web_sm'):
+    os.system("python -m spacy download en_core_web_sm")
 
 nlp = spacy.load('en_core_web_sm')  # md / sm
 
