@@ -3,7 +3,7 @@ from setuptools import setup
 
 
 setup(
-      name="pronoun_replacement",
+      name="depronounize",
       version='0.0.1',
       description="Pronoun replacement module",
       url="https://github.com/NazarTrilisky/PronounReplacement",
