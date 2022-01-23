@@ -1,10 +1,10 @@
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 setup(
     name="depronounize",
-    version='1.0.0',
+    version='1.0.2',
     description="Pronoun replacement module",
     url="https://github.com/NazarTrilisky/PronounReplacement",
     install_requires=["spacy==2.3.2"],
@@ -13,7 +13,6 @@ setup(
     author_email="",
     license="MIT",
     author="Nazar Trilisky",
-    packages=find_packages('src'),
-    package_dir={'': 'src'}
+    packages=["depronounize"]
 )
 
