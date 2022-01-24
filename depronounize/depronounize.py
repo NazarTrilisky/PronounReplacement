@@ -2,12 +2,12 @@
 import os
 import spacy
 
-from libs.pronouns_gender_number import \
+from depronounize.pronouns_gender_number import \
   PLURAL_PRONOUNS, SINGULAR_PRONOUNS,\
   MASCULINE_PRONOUNS, FEMININE_PRONOUNS
 
-from libs.masculine import masculine  # list of masculine nouns/names lower-case
-from libs.feminine import feminine  # list of feminine nouns/names lower-case
+from depronounize.masculine import masculine  # list of masculine nouns/names lower-case
+from depronounize.feminine import feminine  # list of feminine nouns/names lower-case
 
 
 # Setup Spacy
