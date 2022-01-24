@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="depronounize",
-    version='1.0.8',
+    version='1.0.10',
     description="Pronoun replacement module",
     url="https://github.com/NazarTrilisky/PronounReplacement",
     install_requires=["spacy==2.3.2"],
