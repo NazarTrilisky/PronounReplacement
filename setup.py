@@ -7,7 +7,7 @@ setup(
     version='1.0.10',
     description="Pronoun replacement module",
     url="https://github.com/NazarTrilisky/PronounReplacement",
-    install_requires=["spacy==2.3.2"],
+    install_requires=["spacy"],
     include_package_data=True,
     zip_safe=False,
     author_email="",
